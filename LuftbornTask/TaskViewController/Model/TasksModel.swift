@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+//MARK:- TasksModel
+struct TasksModel {
+    
+    let StringDate: String?
+    let taskName: String?
+    
+}

@@ -16,6 +16,9 @@
 		E24B2AA1286B6CBD00CD0EA3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E24B2A9F286B6CBD00CD0EA3 /* LaunchScreen.storyboard */; };
 		E24B2AAC286B6CBD00CD0EA3 /* LuftbornTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24B2AAB286B6CBD00CD0EA3 /* LuftbornTaskTests.swift */; };
 		E24B2AB7286B6CBD00CD0EA3 /* LuftbornTaskUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24B2AB6286B6CBD00CD0EA3 /* LuftbornTaskUITests.swift */; };
+		E24B2ACE286B6CFE00CD0EA3 /* ConcurrentQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24B2ACD286B6CFE00CD0EA3 /* ConcurrentQueue.swift */; };
+		E24B2ADC286B8C9200CD0EA3 /* TasksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24B2ADB286B8C9200CD0EA3 /* TasksModel.swift */; };
+		E24B2AE1286B8CB500CD0EA3 /* TasksTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24B2AE0286B8CB500CD0EA3 /* TasksTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +54,9 @@
 		E24B2AB2286B6CBD00CD0EA3 /* LuftbornTaskUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LuftbornTaskUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E24B2AB6286B6CBD00CD0EA3 /* LuftbornTaskUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LuftbornTaskUITests.swift; sourceTree = "<group>"; };
 		E24B2AB8286B6CBD00CD0EA3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E24B2ACD286B6CFE00CD0EA3 /* ConcurrentQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcurrentQueue.swift; sourceTree = "<group>"; };
+		E24B2ADB286B8C9200CD0EA3 /* TasksModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksModel.swift; sourceTree = "<group>"; };
+		E24B2AE0286B8CB500CD0EA3 /* TasksTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,9 +107,10 @@
 		E24B2A90286B6CB900CD0EA3 /* LuftbornTask */ = {
 			isa = PBXGroup;
 			children = (
+				E24B2AD2286B6D4D00CD0EA3 /* Task Executer */,
+				E24B2AD6286B8C2400CD0EA3 /* TaskViewController */,
 				E24B2A91286B6CB900CD0EA3 /* AppDelegate.swift */,
 				E24B2A93286B6CB900CD0EA3 /* SceneDelegate.swift */,
-				E24B2A95286B6CB900CD0EA3 /* ViewController.swift */,
 				E24B2A97286B6CB900CD0EA3 /* Main.storyboard */,
 				E24B2A9D286B6CBD00CD0EA3 /* Assets.xcassets */,
 				E24B2A9F286B6CBD00CD0EA3 /* LaunchScreen.storyboard */,
@@ -129,6 +136,56 @@
 				E24B2AB8286B6CBD00CD0EA3 /* Info.plist */,
 			);
 			path = LuftbornTaskUITests;
+			sourceTree = "<group>";
+		};
+		E24B2AD2286B6D4D00CD0EA3 /* Task Executer */ = {
+			isa = PBXGroup;
+			children = (
+				E24B2ACD286B6CFE00CD0EA3 /* ConcurrentQueue.swift */,
+			);
+			path = "Task Executer";
+			sourceTree = "<group>";
+		};
+		E24B2AD6286B8C2400CD0EA3 /* TaskViewController */ = {
+			isa = PBXGroup;
+			children = (
+				E24B2AD8286B8C5800CD0EA3 /* View */,
+				E24B2AD7286B8C3700CD0EA3 /* Model */,
+			);
+			path = TaskViewController;
+			sourceTree = "<group>";
+		};
+		E24B2AD7286B8C3700CD0EA3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E24B2ADB286B8C9200CD0EA3 /* TasksModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E24B2AD8286B8C5800CD0EA3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				E24B2ADA286B8C6900CD0EA3 /* ViewController */,
+				E24B2AD9286B8C6300CD0EA3 /* Cell */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		E24B2AD9286B8C6300CD0EA3 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				E24B2AE0286B8CB500CD0EA3 /* TasksTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		E24B2ADA286B8C6900CD0EA3 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				E24B2A95286B6CB900CD0EA3 /* ViewController.swift */,
+			);
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -262,9 +319,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E24B2A9C286B6CB900CD0EA3 /* LuftbornTask.xcdatamodeld in Sources */,
+				E24B2ACE286B6CFE00CD0EA3 /* ConcurrentQueue.swift in Sources */,
+				E24B2ADC286B8C9200CD0EA3 /* TasksModel.swift in Sources */,
 				E24B2A96286B6CB900CD0EA3 /* ViewController.swift in Sources */,
 				E24B2A92286B6CB900CD0EA3 /* AppDelegate.swift in Sources */,
 				E24B2A94286B6CB900CD0EA3 /* SceneDelegate.swift in Sources */,
+				E24B2AE1286B8CB500CD0EA3 /* TasksTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

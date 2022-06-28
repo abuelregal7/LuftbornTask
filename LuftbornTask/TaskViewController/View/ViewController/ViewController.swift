@@ -7,16 +7,14 @@
 
 import UIKit
 
-struct TasksModel {
-    let StringDate: String?
-    let taskName: String?
-}
-
 class ViewController: UIViewController {
+    
+    //MARK:- Outlet properties
     
     @IBOutlet weak var taskTableViewOutlet: UITableView!
     
     @IBOutlet weak var containerViewOfTasksViewOutlet: UIView!
+    @IBOutlet weak var containerViewOfTableViewOutlet: UIView!
     
     @IBOutlet weak var firstTaskViewOutlet: UIView!
     @IBOutlet weak var secondTaskViewOutlet: UIView!
@@ -28,83 +26,75 @@ class ViewController: UIViewController {
     @IBOutlet weak var thirdTaskLabelOutlet: UILabel!
     @IBOutlet weak var fourthTaskLabelOutlet: UILabel!
     
-    let concurrentQueue = ConcurrentQueue()
+    //MARK:- var & let properties
     
-//    var tasks = [String]() {
-//        didSet {
-//            DispatchQueue.main.async { [weak self] in
-//                guard let self = self else { return }
-//                self.taskTableViewOutlet.reloadData()
-//            }
-//        }
-//    }
+    let concurrentQueue = ConcurrentQueue()
     
     var tasks = [TasksModel]() {
         didSet {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.taskTableViewOutlet.reloadData()
+                let indexPath = IndexPath(item: self.tasks.count - 1, section: 0)
+                self.taskTableViewOutlet.scrollToRow(at: indexPath, at: .bottom, animated: true)
             }
         }
     }
     
+    //MARK:- ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        configureTableView()
+        setUIConfiguration()
+        
+    }
+    
+    //MARK:- ConfigureTableView
+    func configureTableView() {
         
         taskTableViewOutlet.delegate = self
         taskTableViewOutlet.dataSource = self
         
-        [containerViewOfTasksViewOutlet, firstTaskViewOutlet, secondTaskViewOutlet, thirdTaskViewOutlet, fourthTaskViewOutlet].forEach({
+        let frame = CGRect(x: 0, y: 0, width: taskTableViewOutlet.frame.size.width, height: 1)
+        taskTableViewOutlet.tableFooterView = UIView(frame: frame)
+        taskTableViewOutlet.tableHeaderView = UIView(frame: frame)
+        
+    }
+    
+    //MARK:- SetUIConfiguration
+    func setUIConfiguration() {
+        
+        [containerViewOfTableViewOutlet, containerViewOfTasksViewOutlet, firstTaskViewOutlet, secondTaskViewOutlet, thirdTaskViewOutlet, fourthTaskViewOutlet].forEach({
             $0?.layer.cornerRadius = 10
         })
-        containerViewOfTasksViewOutlet.layer.borderWidth = 0.5
-        containerViewOfTasksViewOutlet.layer.borderColor = UIColor.gray.cgColor
+        [containerViewOfTableViewOutlet, containerViewOfTasksViewOutlet].forEach({
+            $0?.layer.borderWidth = 0.5
+            $0?.layer.borderColor = UIColor.gray.cgColor
+        })
         
-//        concurrentQueue.enqueueTask {
-//
-//            print("1")
-//            print(Date())
-//            let today = Date()
-//            let formatter = DateFormatter()
-//            formatter.dateFormat =  "dd-MM-yyyy hh:mm"
-//            print(formatter.string(from: today))
-//            self.tasks.append(formatter.string(from: today) + " Task 4")
-//            print(self.tasks)
-//
-//        }
-//
-//        concurrentQueue.enqueueTask {
-//
-//            print("2")
-//            print(Date())
-//            let today = Date()
-//            let formatter = DateFormatter()
-//            formatter.dateFormat =  "dd-MM-yyyy hh:mm"
-//            print(formatter.string(from: today))
-//            self.tasks.append(formatter.string(from: today) + " Task 2")
-//            print(self.tasks)
-//
-//        }
-//
-//        concurrentQueue.enqueueTask {
-//
-//            print("3")
-//            print(Date())
-//            let today = Date()
-//            let formatter = DateFormatter()
-//            formatter.dateFormat =  "dd-MM-yyyy hh:mm"
-//            print(formatter.string(from: today))
-//            self.tasks.append(formatter.string(from: today) + " Task 1")
-//            print(self.tasks)
-//
-//        }
-//
-//        concurrentQueue.runAndRemoveAllTasks()
-        
+        setupInitialTask()
         setFirstTaskViewOutletColor()
         
     }
     
+    //MARK:- SetupInitialTask
+    func setupInitialTask() {
+        
+        concurrentQueue.enqueueTask { [weak self] in
+            guard let self = self else { return }
+            
+            let today = Date()
+            self.tasks.append(TasksModel(StringDate: self.setDateFormatte(date: today), taskName: " Task 1"))
+            print(self.tasks)
+            
+        }
+        
+        concurrentQueue.runAndRemoveAllTasks()
+        
+    }
+    
+    //MARK:- SetFirstTaskViewOutletColor
     func setFirstTaskViewOutletColor() {
         
         firstTaskViewOutlet.backgroundColor = .black
@@ -118,6 +108,7 @@ class ViewController: UIViewController {
         fourthTaskLabelOutlet.textColor = .black
     }
     
+    //MARK:- SetSecondTaskViewOutletColor
     func setSecondTaskViewOutletColor() {
         
         firstTaskViewOutlet.backgroundColor = .white
@@ -132,6 +123,7 @@ class ViewController: UIViewController {
         
     }
     
+    //MARK:- SetThirdTaskViewOutletColor
     func setThirdTaskViewOutletColor() {
         
         firstTaskViewOutlet.backgroundColor = .white
@@ -146,6 +138,7 @@ class ViewController: UIViewController {
         
     }
     
+    //MARK:- SetFourthTaskViewOutletColor
     func setFourthTaskViewOutletColor() {
         
         firstTaskViewOutlet.backgroundColor = .white
@@ -160,6 +153,15 @@ class ViewController: UIViewController {
         
     }
     
+    //MARK:- SetDateFormatte
+    func setDateFormatte(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat =  "dd-MM-yyyy hh:mm:ss"
+        print(formatter.string(from: date))
+        return formatter.string(from: date)
+    }
+    
+    //MARK:- FirstTaskButtonAction
     @IBAction func firstTaskButtonAction(_ sender: Any) {
         
         DispatchQueue.main.async { [weak self] in
@@ -167,14 +169,11 @@ class ViewController: UIViewController {
             self.setFirstTaskViewOutletColor()
         }
         
-        concurrentQueue.enqueueTask {
+        concurrentQueue.enqueueTask { [weak self] in
+            guard let self = self else { return }
             
             let today = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat =  "dd-MM-yyyy hh:mm"
-            print(formatter.string(from: today))
-            //self.tasks.append(formatter.string(from: today) + " Task 1")
-            self.tasks.append(TasksModel(StringDate: formatter.string(from: today), taskName: " Task 1"))
+            self.tasks.append(TasksModel(StringDate: self.setDateFormatte(date: today), taskName: " Task 1"))
             print(self.tasks)
             
         }
@@ -183,6 +182,7 @@ class ViewController: UIViewController {
         
     }
     
+    //MARK:- SecondTaskButtonAction
     @IBAction func secondTaskButtonAction(_ sender: Any) {
         
         DispatchQueue.main.async { [weak self] in
@@ -190,13 +190,11 @@ class ViewController: UIViewController {
             self.setSecondTaskViewOutletColor()
         }
         
-        concurrentQueue.enqueueTask {
+        concurrentQueue.enqueueTask { [weak self] in
+            guard let self = self else { return }
             
             let today = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat =  "dd-MM-yyyy hh:mm"
-            print(formatter.string(from: today))
-            self.tasks.append(TasksModel(StringDate: formatter.string(from: today), taskName: " Task 2"))
+            self.tasks.append(TasksModel(StringDate: self.setDateFormatte(date: today), taskName: " Task 2"))
             print(self.tasks)
             
         }
@@ -205,6 +203,7 @@ class ViewController: UIViewController {
         
     }
     
+    //MARK:- ThirdTaskButtonAction
     @IBAction func thirdTaskButtonAction(_ sender: Any) {
         
         DispatchQueue.main.async { [weak self] in
@@ -212,13 +211,11 @@ class ViewController: UIViewController {
             self.setThirdTaskViewOutletColor()
         }
         
-        concurrentQueue.enqueueTask {
+        concurrentQueue.enqueueTask { [weak self] in
+            guard let self = self else { return }
             
             let today = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat =  "dd-MM-yyyy hh:mm"
-            print(formatter.string(from: today))
-            self.tasks.append(TasksModel(StringDate: formatter.string(from: today), taskName: " Task 3"))
+            self.tasks.append(TasksModel(StringDate: self.setDateFormatte(date: today), taskName: " Task 3"))
             print(self.tasks)
             
         }
@@ -227,6 +224,7 @@ class ViewController: UIViewController {
         
     }
     
+    //MARK:- FourthTaskButtonAction
     @IBAction func fourthTaskButtonAction(_ sender: Any) {
         
         DispatchQueue.main.async { [weak self] in
@@ -234,13 +232,11 @@ class ViewController: UIViewController {
             self.setFourthTaskViewOutletColor()
         }
         
-        concurrentQueue.enqueueTask {
+        concurrentQueue.enqueueTask { [weak self] in
+            guard let self = self else { return }
             
             let today = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat =  "dd-MM-yyyy hh:mm"
-            print(formatter.string(from: today))
-            self.tasks.append(TasksModel(StringDate: formatter.string(from: today), taskName: " Task 4"))
+            self.tasks.append(TasksModel(StringDate: self.setDateFormatte(date: today), taskName: " Task 4"))
             print(self.tasks)
             
         }
@@ -252,6 +248,7 @@ class ViewController: UIViewController {
     
 }
 
+//MARK:- extension from ViewController to inhert from UITableViewDelegate, UITableViewDataSource
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -259,20 +256,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = taskTableViewOutlet.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        guard let cell = taskTableViewOutlet.dequeueReusableCell(withIdentifier: TasksTableViewCell.cellID, for: indexPath) as? TasksTableViewCell else { return UITableViewCell()}
         
-        cell.textLabel?.text = tasks[indexPath.row].StringDate
+        let item = tasks[indexPath.row]
+        
+        cell.configure(model: item)
         
         return cell
     }
     
 }
-
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 60) { [weak self] in
-//
-//                // your code here
-//                guard let self = self else { return }
-//
-//                print(Date())
-//
-//            }
